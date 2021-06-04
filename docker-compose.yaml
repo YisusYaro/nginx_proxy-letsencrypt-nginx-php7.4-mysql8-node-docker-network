@@ -70,9 +70,8 @@ services:
       - ./mysql:/var/lib/mysql
     command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     environment:
-      MYSQL_USER: root
       MYSQL_ROOT_PASSWORD: secret
-      MYSQL_PASSWORD: secret
+      MYSQL_DATABASE: db
     networks:
       - nginx-php74-mysql8-node
 
@@ -82,6 +81,7 @@ services:
     volumes:
       - ./www:/var/www/project
     working_dir: /var/www/project
+    stdin_open: true
     networks:
       - nginx-php74-mysql8-node
 
