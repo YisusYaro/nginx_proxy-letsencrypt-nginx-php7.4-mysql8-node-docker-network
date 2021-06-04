@@ -3,6 +3,6 @@
 ## Despliegue 📦
 
 ```
-USER_ID=$(id -u):$(id -g) docker-compose up
+USER_ID=$(id -u):$(id -g) docker-compose up -d
 
 ```
