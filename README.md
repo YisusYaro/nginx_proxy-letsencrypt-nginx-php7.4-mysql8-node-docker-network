@@ -1,4 +1,4 @@
-# nginx_proxy-letsencrypt-nginx-php7.4-mysql8-node-docker-network
+# nginx_proxy-letsencrypt-nginx-php8.0-mysql8-node-docker-network
 
 ## Deploy 📦
 
