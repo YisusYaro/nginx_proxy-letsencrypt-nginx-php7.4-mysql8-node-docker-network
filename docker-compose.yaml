@@ -1,7 +1,7 @@
 version: '3'
 
 networks:
-  nginx-php74-mysql8-node:
+  nginx-php80-mysql8-node:
 
 services:
 
@@ -16,7 +16,7 @@ services:
       - 'vhostd:/etc/nginx/vhost.d'
       - 'html:/usr/share/nginx/html'
     networks:
-      - nginx-php74-mysql8-node
+      - nginx-php80-mysql8-node
     labels:
       - com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy
 
@@ -45,22 +45,22 @@ services:
     depends_on:
       - nginx-proxy
       - letsencrypt
-      - php74-service
+      - php80-service
     networks:
-      - nginx-php74-mysql8-node
+      - nginx-php80-mysql8-node
 
-  php74-service:
+  php80-service:
     build:
       context: .
       dockerfile: ./php/Dockerfile
-    container_name: php74-container
+    container_name: php80-container
     expose:
       - '9000'
     volumes:
       - './www:/var/www/project'
     user: ${USER_ID}
     networks:
-      - nginx-php74-mysql8-node
+      - nginx-php80-mysql8-node
 
   mysql8-service:
     image: mysql:8
@@ -75,7 +75,7 @@ services:
       MYSQL_ROOT_PASSWORD: secret
       MYSQL_DATABASE: db
     networks:
-      - nginx-php74-mysql8-node
+      - nginx-php80-mysql8-node
 
   node-service:
     image: node:latest
@@ -86,7 +86,7 @@ services:
     working_dir: /var/www/project
     stdin_open: true
     networks:
-      - nginx-php74-mysql8-node
+      - nginx-php80-mysql8-node
 
 volumes:
   certs: null
