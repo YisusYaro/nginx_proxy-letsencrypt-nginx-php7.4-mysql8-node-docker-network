@@ -5,8 +5,7 @@ Template for developing apps using nginx proxy, letsencrypt, nginx, php8.0, mysq
 ## Deploy 📦
 
 ```
-docker-compose up -d
-
+USER_ID=$(id -u):$(id -g) docker-compose up -d
 ```
 
 ## See result in your localhost 🚀
