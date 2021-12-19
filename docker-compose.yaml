@@ -1,4 +1,4 @@
-version: '3'
+version: '3.8'
 
 networks:
   nginx-php-mysql-node:
@@ -52,8 +52,8 @@ services:
 
   php-service:
     build:
-      context: .
-      dockerfile: ./php/Dockerfile
+      context: ./php
+      dockerfile: ./Dockerfile
     container_name: php-container
     expose:
       - '9000'
