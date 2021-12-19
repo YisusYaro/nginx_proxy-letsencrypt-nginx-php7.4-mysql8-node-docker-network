@@ -1,7 +1,7 @@
 version: '3'
 
 networks:
-  nginx-php80-mysql8-node:
+  nginx-php-mysql-node:
 
 services:
 
@@ -16,7 +16,7 @@ services:
       - 'vhostd:/etc/nginx/vhost.d'
       - 'html:/usr/share/nginx/html'
     networks:
-      - nginx-php80-mysql8-node
+      - nginx-php-mysql-node
     labels:
       - com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy
 
@@ -24,6 +24,7 @@ services:
     image: jrcs/letsencrypt-nginx-proxy-companion
     environment:
       - NGINX_PROXY_CONTAINER=nginx-proxy
+      - ACME_CA_URI=https://acme-staging-v02.api.letsencrypt.org/directory
     volumes:
       - 'certs:/etc/nginx/certs:rw'
       - 'vhostd:/etc/nginx/vhost.d'
@@ -31,7 +32,7 @@ services:
       - '/var/run/docker.sock:/var/run/docker.sock:ro'
   
   nginx-service:
-    image: nginx
+    image: nginx:alpine
     container_name: nginx-container
     expose:
       - '80'
@@ -45,48 +46,45 @@ services:
     depends_on:
       - nginx-proxy
       - letsencrypt
-      - php80-service
+      - php-service
     networks:
-      - nginx-php80-mysql8-node
+      - nginx-php-mysql-node
 
-  php80-service:
+  php-service:
     build:
       context: .
       dockerfile: ./php/Dockerfile
-    container_name: php80-container
+    container_name: php-container
     expose:
       - '9000'
     volumes:
       - './www:/var/www/project'
-    user: ${USER_ID}
     networks:
-      - nginx-php80-mysql8-node
+      - nginx-php-mysql-node
 
-  mysql8-service:
+  mysql-service:
     image: mysql:8
-    container_name: mysql8-container
+    container_name: mysql-container
     expose:
       - '3306'
     volumes:
       - ./mysql:/var/lib/mysql
-    user: ${USER_ID}
     command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     environment:
       MYSQL_ROOT_PASSWORD: secret
       MYSQL_DATABASE: db
     networks:
-      - nginx-php80-mysql8-node
+      - nginx-php-mysql-node
 
   node-service:
-    image: node:latest
+    image: node:lts-alpine
     container_name: node-container
     volumes:
       - ./www:/var/www/project
-    user: ${USER_ID}
     working_dir: /var/www/project
     stdin_open: true
     networks:
-      - nginx-php80-mysql8-node
+      - nginx-php-mysql-node
 
 volumes:
   certs: null
